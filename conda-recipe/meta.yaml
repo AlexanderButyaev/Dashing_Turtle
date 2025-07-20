@@ -1,0 +1,107 @@
+package:
+  name: "DashingTurtle
+  version: "0.1.3"
+
+source:
+  path: ..
+
+build:
+  noarch: python
+  script: "{{ PYTHON }} -m pip install . --no-deps --ignore-installed -vv"
+
+requirements:
+  host:
+    - python >=3.8
+    - pip
+
+  run:
+    - python >=3.8
+    - asttokens ==2.4.1
+    - bcrypt ==4.2.0
+    - cffi ==1.17.1
+    - colorama ==0.4.6
+    - colour ==0.1.5
+    - contourpy ==1.2.1
+    - cryptography
+    - cycler ==0.12.1
+    - python-dotenv  # maps to "dotenv"
+    - decorator ==5.1.1
+    - deprecated ==1.2.14
+    - drawsvg ==2.4.0
+    - executing ==2.0.1
+    - filelock ==3.14.0
+    - fonttools ==4.51.0
+    - fsspec ==2024.5.0
+    - greenlet ==3.1.1
+    - iniconfig ==2.1.0
+    - ipython
+    - jedi ==0.19.1
+    - jinja2 ==3.1.4
+    - joblib ==1.4.2
+    - kiwisolver ==1.4.5
+    - kmodes ==0.12.2
+    - mariadb ==1.1.10
+    - markdown-it-py ==3.0.0
+    - markupsafe ==2.1.5
+    - matplotlib ==3.9.0
+    - matplotlib-inline ==0.1.7
+    - matplotlib-venn ==1.1.1
+    - mdurl ==0.1.2
+    - mpmath ==1.3.0
+    - mysql-connector-python ==2.2.9  # maps to "mysql-connector"
+    - networkx
+    - numpy ==1.26.4
+    - packaging ==24.0
+    - pandas ==2.2.2
+    - paramiko ==3.5.0
+    - parso ==0.8.4
+    - pexpect ==4.9.0
+    - pillow ==10.3.0
+    - platformdirs ==4.2.2
+    - pluggy ==1.6.0
+    - prompt-toolkit ==3.0.47
+    - ptyprocess ==0.7.0
+    - pure_eval ==0.2.3
+    - pycparser ==2.22
+    - pygments ==2.18.0
+    - pymysql ==1.1.1
+    - pynacl ==1.5.0
+    - pyparsing ==3.1.2
+    - pyqt ==5.15.11  # unified conda package for PyQt5
+    - pyqt5-sip ==12.17.0
+    - pyqt6 ==6.9.0
+    - pyqt6-sip ==13.10.2
+    - pysam ==0.23.0
+    - pytest ==8.4.1
+    - python-dateutil ==2.9.0.post0
+    - pytz ==2024.1
+    - pywavelets  # available in conda-forge
+    - pyyaml ==6.0.2
+    - rich ==14.0.0
+    - scikit-learn
+    - scipy ==1.13.0
+    - seaborn ==0.13.2
+    - six ==1.16.0
+    - snowflake-id ==1.0.2
+    - sqlalchemy ==2.0.36
+    - sshtunnel ==0.4.0
+    - stack_data ==0.6.3
+    - svgpathtools ==1.6.1
+    - svgwrite ==1.4.3
+    - sympy ==1.12.1
+    - threadpoolctl ==3.5.0
+    - pytorch  # use 'pytorch' in conda, not 'torch'
+    - traitlets ==5.14.3
+    - typing-extensions ==4.12.1
+    - tzdata ==2024.1
+    - varnaapi ==1.2.0
+    - wcwidth ==0.2.13
+    - wrapt ==1.16.0
+about:
+  home: https://github.com/jwbear/Dashing_Turtle
+  license: MIT
+  summary: "An applicaton for building structural landscapes of RNA sequence modifications with Nanopore data."
+
+extra:
+  recipe-maintainers:
+    - jwbear
