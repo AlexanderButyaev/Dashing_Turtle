@@ -6,10 +6,6 @@ build:
   tools:
     python: "3.10"
 
-# Use conda as the environment manager
-conda:
-  environment: environment.yml  # Must exist at project root
-
 # Python settings and pip install
 python:
   install:

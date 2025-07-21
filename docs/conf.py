@@ -13,7 +13,7 @@ sys.path.insert(0, os.path.abspath('..'))
 project = 'DashingTurtle'
 copyright = '2025, J. White Bear'
 author = 'J. White Bear'
-release = '0.1.3'
+release = '0.1.4'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
