@@ -9,8 +9,6 @@ build:
 # Python settings and pip install
 python:
   install:
-    - method: pip
-      path: .  # Install your package via setup.py
     - requirements: docs/requirements.txt  # Project-wide pip dependencies
 
 sphinx:
