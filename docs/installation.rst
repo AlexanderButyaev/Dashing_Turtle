@@ -63,13 +63,7 @@ You’ll now configure the local Python environment for running the app.
 
    pip install --upgrade pip
 
-**4. Install dependencies**
-
-.. code-block:: bash
-
-   pip install -r requirements.txt
-
-**5. Install Dashing Turtle from PyPI**
+**4. Install Dashing Turtle from PyPI**
 
 .. code-block:: bash
 

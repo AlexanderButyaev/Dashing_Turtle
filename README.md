@@ -1,5 +1,7 @@
 🌟 Dashing Turtle Setup & Usage Guide
 
+[![Docs](https://readthedocs.org/projects/dashing-turtle/badge/?version=latest)](https://dashing-turtle.readthedocs.io/en/latest/)
+
 Welcome! This guide will help you install and run the Dashing Turtle application, even if you have little technical background. Just follow each step carefully!
 💾 Step 1: Install Docker (for the database)
 
@@ -40,10 +42,6 @@ venv\Scripts\activate
 ✅ Upgrade pip
 
 pip install --upgrade pip
-
-✅ Install required Python packages
-
-pip install -r requirements.txt
 
 ✅ Install Dashing Turtle from PyPI
 
