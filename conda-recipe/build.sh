@@ -9,7 +9,7 @@ set -euxo pipefail
 #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
 
 $PYTHON -m pip install --no-deps --ignore-installed \
-    mariadb==1.1.10 \
+    mariadb==1.1.13 \
     typing-extensions==4.12.1 \
     fsspec==2024.5.0 \
     pysam==0.23.0 \
