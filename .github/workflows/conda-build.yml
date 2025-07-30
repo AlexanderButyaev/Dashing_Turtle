@@ -20,6 +20,12 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Install APT dependencies (Ubuntu only)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt update
+          sudo apt install -y python3-dev libmariadb-dev
+
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
