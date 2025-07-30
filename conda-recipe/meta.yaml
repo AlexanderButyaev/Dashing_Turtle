@@ -63,7 +63,6 @@ requirements:
     - qt-main
     - typing_extensions
     - fsspec
-    - pysam
     - deprecated
     - pygments
     - matplotlib-venn

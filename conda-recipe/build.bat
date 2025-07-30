@@ -10,6 +10,7 @@ set PY_VER=%PY_MAJOR%.%PY_MINOR%
 %PYTHON% -m pip install --no-index --find-links=%SRC_DIR%\conda-recipe\wheels PyQt6 PyQt6-sip PyQt6-Qt6
 $PYTHON% -m pip install mariadb
 $PYTHON% -m pip install snowflake-id
+$PYTHON% -m pip install pysam
 
 :: Install the package
 %PYTHON% -m pip install . --no-deps --ignore-installed -vv
