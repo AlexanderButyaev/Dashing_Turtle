@@ -15,8 +15,7 @@ requirements:
   host:
     - python =3.9
     - pip
-    - viennarna
-
+    - 
   run:
     - python =3.9
     - setuptools <81
