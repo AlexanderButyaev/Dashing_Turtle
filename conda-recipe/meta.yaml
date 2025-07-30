@@ -15,7 +15,7 @@ requirements:
   host:
     - python =3.9
     - pip
-    - pyqt6
+    - pyqt6  # [not osx_arm64]
 
   run:
     - python =3.9
