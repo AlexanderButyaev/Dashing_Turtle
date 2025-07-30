@@ -1,3 +1,4 @@
+---
 name: Conda Build & Upload
 
 on:
@@ -14,6 +15,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-latest, windows-latest]
         python-version: [3.9]
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -21,25 +23,26 @@ jobs:
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate-base: true
+          auto-activate-base: "true"
           python-version: ${{ matrix.python-version }}
-          channels: jwbear,defaults
+          channels: jwbear,conda-forge,defaults,bioconda
           use-only-tar-bz2: true
 
-      - name: Install dependencies
+      - name: Install conda-build tools
         run: |
           conda install -n base conda-build anaconda-client conda-verify
 
       - name: Build Conda package
         run: |
-          conda build conda-recipe
+          conda config --set anaconda_upload no
+          conda build conda-recipe --python ${{ matrix.python-version }}
 
-      - name: Upload to Anaconda (if on main branch)
+      - name: Upload to Anaconda (main branch only)
         if: github.ref == 'refs/heads/main'
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
         run: |
-          anaconda login --token $ANACONDA_API_TOKEN
-          BUILT_PACKAGE=$(conda build conda-recipe --output)
-          anaconda upload $BUILT_PACKAGE
-
+          echo "Getting build output path..."
+          BUILT_PACKAGE=$(conda build conda-recipe --python ${{ matrix.python-version }} --output)
+          echo "Uploading: $BUILT_PACKAGE"
+          anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
