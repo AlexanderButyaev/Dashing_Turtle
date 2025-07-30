@@ -25,7 +25,6 @@ jobs:
         with:
           auto-activate-base: "true"
           python-version: ${{ matrix.python-version }}
-          channels: jwbear,conda-forge,bioconda, defualts
           use-only-tar-bz2: true
 
       - name: Set channel priority
