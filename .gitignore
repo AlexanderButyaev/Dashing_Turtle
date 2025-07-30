@@ -9,7 +9,7 @@ build/
 dist/
 *.egg
 .eggs/
-*.whl
+
 
 # Installer metadata
 *.manifest

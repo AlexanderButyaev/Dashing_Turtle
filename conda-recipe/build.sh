@@ -2,11 +2,11 @@
 set -euxo pipefail
 
 # Install from local wheels
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels svgpathtools==1.6.1
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels matplotlib==3.9.0
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels tzdata
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+#$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels svgpathtools==1.6.1
+#$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
+#$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels matplotlib==3.9.0
+#$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels tzdata
+#$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
 
 $PYTHON -m pip install --no-deps --ignore-installed \
     mariadb==1.1.10 \
@@ -37,7 +37,14 @@ $PYTHON -m pip install --no-deps --ignore-installed \
     packaging==24.0 \
     asttokens==2.4.1 \
     sympy==1.12.1 \
-    drawsvg==2.4.0
+    drawsvg==2.4.0 \
+    PyQt6 \
+    PyQt6-sip \
+    PyQt6-Qt6 \
+    tzdata \
+    matplotlib==3.9.0 \
+    varnaapi \
+    svgpathtools==1.6.1
 
 
 # Install the package using pip
