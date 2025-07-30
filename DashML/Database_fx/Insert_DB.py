@@ -192,7 +192,7 @@ def insert_rx_full(df):
             # display all records
             qry = "SELECT * FROM Reactivity_full WHERE LID IN (" + lids + ");"
             table = conn.execute(text(qry)).fetchall()
-            print(len(table))
+            #print(len(table))
 
     except Exception as error:
         print("Failed to execute: {}".format(error))
@@ -234,7 +234,7 @@ def insert_read_depth_full_update(lids, threshold, rx_threshold=.7):
         with con.connect() as conn:
             with conn.begin():
                 query = ('CALL UPDATE_BPP({0},{1},{2});').format(lids, threshold, rx_threshold)
-                print(query)
+                #print(query)
                 conn.execute(text(query))
                 conn.commit()
 

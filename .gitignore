@@ -39,11 +39,6 @@ htmlcov/
 .pyre/
 .pytype/
 
-# Sphinx docs
-docs/build/
-docs/.doctrees/
-docs/_build/
-
 # System files
 .DS_Store
 Thumbs.db
@@ -60,3 +55,15 @@ db/*.sqlite3
 
 #tmp
 TMP/
+
+# Ignore LFS-tracked files
+.gitattributes
+.gitattributes.lock
+
+# Ignore Git and VCS folders
+.git/
+.gitignore
+
+# Ignore other hidden or system-specific files
+*.sublime-project
+*.sublime-workspace

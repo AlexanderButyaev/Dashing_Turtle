@@ -25,7 +25,7 @@ def get_metric(dfr):
     #### predict modification based on percent modified read depth ####
     mean = dfr['percent_modified'].mean()
     dfr['Predict'] = np.where(dfr['percent_modified'] > mean, -1, 1)
-    print(dfr.columns)
+    #print(dfr.columns)
     return dfr
 
 #### GMM for each position across all reads ###

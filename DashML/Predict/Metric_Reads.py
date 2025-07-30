@@ -227,7 +227,7 @@ def signal_peaks(lids):
     # insert dt
     dbins.insert_secondary_metric(dt)
 
-    print(dt.head(10))
+    #print(dt.head(10))
 
 #### dwell Peaks ####
 def dwell_peaks(lids):
@@ -271,7 +271,7 @@ def dwell_peaks(lids):
     # insert dt
     dbins.insert_secondary_metric(dt)
 
-    print(dt.head(10))
+    #print(dt.head(10))
 
 
 #### Lof Signal ####
@@ -316,7 +316,7 @@ def lof_signal(lids):
     # insert dt
     dbins.insert_secondary_metric(dt)
 
-    print(dt.head(10))
+    #print(dt.head(10))
 
 
 #### Lof Dwell ####
@@ -407,7 +407,7 @@ def vienna(lids):
     # insert dt
     dbins.insert_secondary_metric(dt)
 
-    print(dt.head(10))
+    #print(dt.head(10))
 
 
 #### Reactivity Results ######
@@ -454,7 +454,7 @@ def read_depth_full(lids):
     # insert dt
     dbins.insert_secondary_metric(dt)
 
-    print(dt.head(10))
+    #print(dt.head(10))
 
 def read_depth(lids):
     print("Read Depth Averaged, Read Index -1")

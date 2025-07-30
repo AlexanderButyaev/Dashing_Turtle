@@ -1,0 +1,45 @@
+name: Conda Build & Upload
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python-version: [3.9]
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          auto-activate-base: true
+          python-version: ${{ matrix.python-version }}
+          channels: jwbear,defaults
+          use-only-tar-bz2: true
+
+      - name: Install dependencies
+        run: |
+          conda install -n base conda-build anaconda-client conda-verify
+
+      - name: Build Conda package
+        run: |
+          conda build conda-recipe
+
+      - name: Upload to Anaconda (if on main branch)
+        if: github.ref == 'refs/heads/main'
+        env:
+          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+        run: |
+          anaconda login --token $ANACONDA_API_TOKEN
+          BUILT_PACKAGE=$(conda build conda-recipe --output)
+          anaconda upload $BUILT_PACKAGE
+

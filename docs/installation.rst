@@ -3,7 +3,16 @@ Installation
 
 Welcome to the Dashing Turtle installation guide! This document will walk you through setting up and running the Dashing Turtle application, whether you're using Windows, macOS, or Linux.
 
-Step 1: Install Docker (for the database)
+Step 1: Install ViennaRNA for putative structures
+-----------------------------------------
+
+DashingTurtle uses the predicted reactivities as constraints in ViennaRNA to calculate putative structures.
+
+ViennaRNA can be downloaded and installed by following the instructions:
+https://www.tbi.univie.ac.at/RNA/ViennaRNA/doc/html/install.html
+
+
+Step 2: Install Docker (for the database)
 -----------------------------------------
 
 Dashing Turtle uses a Dockerized database to store your data. You’ll need Docker installed to run it.
@@ -20,7 +29,7 @@ Dashing Turtle uses a Dockerized database to store your data. You’ll need Dock
 - Install Docker Engine following the instructions for your distribution:
   https://docs.docker.com/engine/install/
 
-Step 2: Start the Database
+Step 3: Start the Database
 --------------------------
 
 Open your terminal or command prompt, navigate to your project directory, and run:
@@ -32,7 +41,7 @@ Open your terminal or command prompt, navigate to your project directory, and ru
 ✔ This command will download and start the database in the background.
 ✔ Your data will persist across sessions.
 
-Step 3: Set Up the Python Environment
+Step 4: Set Up the Python Environment
 -------------------------------------
 
 You’ll now configure the local Python environment for running the app.
@@ -69,7 +78,7 @@ You’ll now configure the local Python environment for running the app.
 
    pip install DashingTurtle
 
-Step 4: Run the Application
+Step 5: Run the Application
 ---------------------------
 
 You can now launch the application in either GUI or CLI mode:

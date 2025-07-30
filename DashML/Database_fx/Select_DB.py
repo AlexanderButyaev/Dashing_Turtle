@@ -105,7 +105,7 @@ def select_predict(lids):
             # call stored proc with sequence as param
             # return result set convert to df
             query = 'CALL SelectPredict ("{0}")'.format(lids)
-            print(query)
+            #print(query)
             df = pd.read_sql_query(query, conn)
 
     except Exception as error:
@@ -126,7 +126,7 @@ def select_unmod(seq, temp=37, type1='dmso', type2='dmso', complex=0):
             query = 'CALL SelectUnmod ("{0}",{1},"{2}","{3}", "{4}")'.format(seq,temp,type1,type2,complex)
             #print(query)
             df = pd.read_sql_query(query, conn)
-            print(seq + " records " + str(len(df)))
+            #print(seq + " records " + str(len(df)))
 
     except Exception as error:
         print("Failed to execute: {}".format(error))
@@ -185,7 +185,7 @@ def select_mod(seq, temp=37, type1='dmso', type2='acim', complex=0):
             query = 'CALL SelectMod ("{0}",{1},"{2}","{3}", "{4}")'.format(seq,temp,type1,type2,complex)
             #print(query)
             df = pd.read_sql_query(query, conn)
-            print(seq + " records " + str(len(df)))
+            #print(seq + " records " + str(len(df)))
 
     except Exception as error:
         print("Failed to execute: {}".format(error))

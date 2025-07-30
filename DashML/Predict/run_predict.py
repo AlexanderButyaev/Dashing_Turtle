@@ -16,7 +16,7 @@ from DashML.Predict import Lof
 from DashML.Database_fx import Select_DB as dbsel
 
 
-print(user_documents_path())
+print("User Output Path:", user_documents_path())
 output = user_documents_path() / "DTLandscape_Output"
 output.mkdir(parents=True, exist_ok=True)
 

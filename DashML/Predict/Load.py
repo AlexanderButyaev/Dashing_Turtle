@@ -25,7 +25,7 @@ def get_predicted_structures():
     lids = df['LID'].unique()
 
     for lid in lids:
-        print(lid)
+        #print(lid)
         pbpp.get_probabilities(lid, lid, reactivity=None, read=-2)
 
 get_predicted_structures()
