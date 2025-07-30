@@ -25,7 +25,7 @@ jobs:
         with:
           auto-activate-base: "true"
           python-version: ${{ matrix.python-version }}
-          channels: jwbear
+          channels: jwbear,bioconda,conda-forge
           use-only-tar-bz2: true
 
       - name: Create conda build environment
