@@ -28,18 +28,16 @@ jobs:
           channels: jwbear
           use-only-tar-bz2: true
 
-      - name: Create conda build env
-        run: |
-          conda create -n build-env python=3.9 -y
-          conda activate build-env
-          conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
-          conda install -n build-env -c conda-forge libarchive
+      - name: Create conda build environment
+        run: conda create -n build-env python=${{ matrix.python-version }} -y
+
+      - name: Install build dependencies
+        run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
 
       - name: Build Conda package
         run: |
-          source activate build-env
           conda config --set anaconda_upload no
-          conda build conda-recipe --python ${{ matrix.python-version }}
+          conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }}
 
       - name: Upload to Anaconda (main branch only)
         if: github.ref == 'refs/heads/main'
