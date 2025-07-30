@@ -93,7 +93,6 @@ requirements:
     - wrapt ==1.16.0
     - markupsafe ==2.0
     - qt-main
-    - viennarna
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
