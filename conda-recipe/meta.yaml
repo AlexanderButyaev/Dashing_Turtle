@@ -103,3 +103,6 @@ about:
 extra:
   recipe-maintainers:
     - jwbear
+  channels:
+    - conda-forge
+    - defaults
