@@ -25,12 +25,13 @@ jobs:
         with:
           auto-activate-base: "true"
           python-version: ${{ matrix.python-version }}
-          channels: jwbear,conda-forge,defaults,bioconda
+          channels: jwbear
           use-only-tar-bz2: true
 
       - name: Install conda-build tools
         run: |
           conda install -n base conda-build anaconda-client conda-verify
+          conda install -n base -c conda-forge libarchive
 
       - name: Build Conda package
         run: |
