@@ -37,7 +37,8 @@ jobs:
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto-activate-base: "true"
+          activate-environment: build-env
+          channels: conda-forge
           python-version: ${{ matrix.python-version }}
           use-only-tar-bz2: true
 
