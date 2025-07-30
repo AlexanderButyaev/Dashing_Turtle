@@ -70,7 +70,6 @@ requirements:
     - platformdirs
     - prompt-toolkit
     - bcrypt
-    - snowflake-id
     - stack_data
     - rich
     - sqlalchemy
