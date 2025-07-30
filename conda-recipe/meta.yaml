@@ -15,6 +15,7 @@ requirements:
   host:
     - python =3.9
     - pip
+    - pyqt6
 
   run:
     - python =3.9
@@ -90,6 +91,7 @@ requirements:
     - tzdata
     - matplotlib
     - svgpathtools
+    - pyqt6
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
