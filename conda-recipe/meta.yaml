@@ -91,7 +91,7 @@ requirements:
     - tzdata
     - matplotlib
     - svgpathtools
-    - pyqt6
+    - pyqt6  # [not osx_arm64]
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle

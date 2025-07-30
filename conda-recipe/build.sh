@@ -7,6 +7,10 @@ $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varn
 #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels matplotlib==3.9.0
 #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels tzdata
 #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+if [[ "$(uname)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
+    $PYTHON -m pip install PyQt6 PyQt6-sip PyQt6-Qt6
+fi
+
 $PYTHON -m pip install mariadb
 $PYTHON -m pip install snowflake-id
 $PYTHON -m pip install pysam
