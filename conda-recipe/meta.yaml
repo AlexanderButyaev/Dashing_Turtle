@@ -61,6 +61,38 @@ requirements:
     - wcwidth ==0.2.13
     - markupsafe ==2.0
     - qt-main
+    - typing_extensions
+    - fsspec
+    - pysam
+    - deprecated
+    - pygments
+    - matplotlib-venn
+    - platformdirs
+    - prompt-toolkit
+    - bcrypt
+    - snowflake-id
+    - stack_data
+    - rich
+    - sqlalchemy
+    - pure_eval
+    - cycler
+    - pluggy
+    - executing
+    - pycparser
+    - wrapt
+    - matplotlib-inline
+    - kiwisolver
+    - filelock
+    - mdurl
+    - markdown-it-py
+    - packaging
+    - asttokens
+    - sympy
+    - drawsvg
+    - tzdata
+    - matplotlib
+    - svgpathtools
+    - mariadb
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
