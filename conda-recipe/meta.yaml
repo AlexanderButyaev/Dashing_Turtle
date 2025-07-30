@@ -92,7 +92,6 @@ requirements:
     - tzdata
     - matplotlib
     - svgpathtools
-    - mariadb
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle

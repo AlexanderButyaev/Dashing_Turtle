@@ -38,7 +38,7 @@ jobs:
         uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: build-env
-          channels: conda-forge
+          channels: conda-forge, bioconda
           python-version: ${{ matrix.python-version }}
           use-only-tar-bz2: true
 
