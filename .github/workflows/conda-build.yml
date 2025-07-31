@@ -79,7 +79,7 @@ jobs:
           echo "Getting build output path..."
           BUILT_PACKAGE=$(conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }} --output)
           echo "Uploading: $BUILT_PACKAGE"
-          anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
+          conda run -n build-env anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
 
       - name: Upload to Anaconda (Windows)
         if: runner.os == 'Windows' && github.ref == 'refs/heads/main'
