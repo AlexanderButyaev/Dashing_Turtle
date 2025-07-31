@@ -92,6 +92,9 @@ requirements:
     - matplotlib
     - drawsvg <=1.9.0
     - svgpathtools <=1.4.1
+    - mariadb == 1.1.10
+    - snowflake-id== 1.0.2
+    - pysam
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
