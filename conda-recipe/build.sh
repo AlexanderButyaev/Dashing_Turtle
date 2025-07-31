@@ -9,10 +9,9 @@ $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varn
 if [[ "$(uname)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
   $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
   $PYTHON -m pip install mariadb
+  $PYTHON -m pip install snowflake-id
+  $PYTHON -m pip install pysam
 fi
-
-$PYTHON -m pip install snowflake-id
-$PYTHON -m pip install pysam
 
 # Install the package using pip
 $PYTHON -m pip install . --no-deps --ignore-installed -vv
