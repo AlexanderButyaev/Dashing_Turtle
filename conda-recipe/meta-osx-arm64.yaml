@@ -94,9 +94,6 @@ requirements:
     - svgpathtools <=1.4.1
     - pysam
     - pip
-    - pip:
-        - mariadb
-        - snowflake-id
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
