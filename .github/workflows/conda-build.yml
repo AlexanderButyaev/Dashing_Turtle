@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
+        os: [macos-latest]
         python-version: [3.9]
 
     steps:
@@ -71,30 +71,30 @@ jobs:
           conda config --set anaconda_upload no
           conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }}
 
-      - name: Upload to Anaconda (Unix)
-        if: runner.os != 'Windows' && github.ref == 'refs/heads/main'
-        env:
-          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
-        run: |
-          echo "Getting build output path..."
-          BUILT_PACKAGE=$(conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }} --output)
-          echo "Uploading: $BUILT_PACKAGE"
-          conda run -n build-env anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
-
-      - name: Upload to Anaconda (Windows)
-        if: runner.os == 'Windows' && github.ref == 'refs/heads/main'
-        env:
-          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
-        shell: pwsh
-        run: |
-          Write-Output "Setting up Conda environment..."
-          $env:Path += ";C:\Miniconda\Scripts;C:\Miniconda;C:\Miniconda\Library\bin"
-          conda init powershell
-          & $env:USERPROFILE\Documents\WindowsPowerShell\profile.ps1  # Load conda if needed
-          conda activate build-env
-
-          Write-Output "Getting build output path..."
-          $BUILT_PACKAGE = conda build conda-recipe --python ${{ matrix.python-version }} --output
-
-          Write-Output "Uploading: $BUILT_PACKAGE"
-          anaconda -t $env:ANACONDA_API_TOKEN upload --user jwbear --force $BUILT_PACKAGE
+#      - name: Upload to Anaconda (Unix)
+#        if: runner.os != 'Windows' && github.ref == 'refs/heads/main'
+#        env:
+#          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+#        run: |
+#          echo "Getting build output path..."
+#          BUILT_PACKAGE=$(conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }} --output)
+#          echo "Uploading: $BUILT_PACKAGE"
+#          conda run -n build-env anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
+#
+#      - name: Upload to Anaconda (Windows)
+#        if: runner.os == 'Windows' && github.ref == 'refs/heads/main'
+#        env:
+#          ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
+#        shell: pwsh
+#        run: |
+#          Write-Output "Setting up Conda environment..."
+#          $env:Path += ";C:\Miniconda\Scripts;C:\Miniconda;C:\Miniconda\Library\bin"
+#          conda init powershell
+#          & $env:USERPROFILE\Documents\WindowsPowerShell\profile.ps1  # Load conda if needed
+#          conda activate build-env
+#
+#          Write-Output "Getting build output path..."
+#          $BUILT_PACKAGE = conda build conda-recipe --python ${{ matrix.python-version }} --output
+#
+#          Write-Output "Uploading: $BUILT_PACKAGE"
+#          anaconda -t $env:ANACONDA_API_TOKEN upload --user jwbear --force $BUILT_PACKAGE
