@@ -76,9 +76,8 @@ jobs:
         env:
           ANACONDA_API_TOKEN: ${{ secrets.ANACONDA_API_TOKEN }}
         run: |
-          source activate build-env
           echo "Getting build output path..."
-          BUILT_PACKAGE=$(conda build conda-recipe --python ${{ matrix.python-version }} --output)
+          BUILT_PACKAGE=$(conda run -n build-env conda build conda-recipe --python ${{ matrix.python-version }} --output)
           echo "Uploading: $BUILT_PACKAGE"
           anaconda -t $ANACONDA_API_TOKEN upload --user jwbear --force "$BUILT_PACKAGE"
 
