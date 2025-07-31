@@ -54,6 +54,32 @@ jobs:
       - name: Install build dependencies
         run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
 
+      - name: Conditionally install pyqt6 on Linux
+        if: runner.os == 'Linux'
+        shell: bash
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          conda activate build-env
+          conda install -y pyqt6
+
+      - name: Conditionally install pyqt6 on macOS (x86_64 only)
+        if: runner.os == 'macOS'
+        shell: bash
+        run: |
+          source $CONDA/etc/profile.d/conda.sh
+          conda activate build-env
+          if [[ "$(uname -m)" != "arm64" ]]; then
+            conda install -y pyqt6
+          else
+            pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+          fi
+
+      - name: Install pyqt6 on Windows
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          conda activate build-env
+          conda install -y pyqt6
       - name: Build Conda package
         run: |
           conda config --set anaconda_upload no
