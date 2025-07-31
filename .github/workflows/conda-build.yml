@@ -39,7 +39,7 @@ jobs:
           if [[ "$RUNNER_OS" == "macOS" ]] && [[ "$(uname -m)" == "arm64" ]]; then
             cp conda-recipe/meta-osx-arm64.yaml conda-recipe/meta.yaml
           else
-            cp conda-recipe/meta-linux.yaml conda-recipe/meta.yaml
+            cp conda-recipe/meta-default.yaml conda-recipe/meta.yaml
           fi
         shell: bash
 
