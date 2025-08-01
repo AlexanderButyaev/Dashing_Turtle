@@ -9,7 +9,7 @@ if [[ "$(uname)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
   #$PYTHON -m pip install mariadb --verbose
   #$PYTHON -m pip install snowflake-id
   #$PYTHON -m pip install PyQt6 PyQt6-sip PyQt6-Qt6
-  $PYTHON -m pip install pysam
+  $PYTHON -m pip3 install pysam --verbose
 fi
 
 # Install the package using pip
