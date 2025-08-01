@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13]
+        os: [macos-latest]
         python-version: [3.9]
 
     steps:
@@ -71,7 +71,6 @@ jobs:
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v3
         with:
-          auto_activate_base: false
           activate-environment: build-env
           channels: conda-forge, bioconda
           python-version: ${{ matrix.python-version }}
