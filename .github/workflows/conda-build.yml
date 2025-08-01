@@ -36,6 +36,29 @@ jobs:
           pip3 install snowflake-id
           pip3 install pysam
 
+      - name: Install Homebrew dependencies (macOS only)
+        if: startsWith(matrix.os, 'macos')
+        run: |
+          brew update
+      
+          # Install MySQL and MariaDB client libraries
+          brew install mysql-client
+          brew install mariadb-connector-c
+      
+          # Add MySQL client tools to PATH
+          echo 'export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"' >> ~/.zprofile
+          source ~/.zprofile
+      
+          # Ensure pip is available and up to date
+          python3 -m ensurepip --upgrade
+          python3 -m pip install --upgrade pip
+      
+          # Install Python packages
+          pip3 install mysql-connector-python
+          pip3 install snowflake-id
+          pip3 install pysam
+
+
       - name: Choose correct meta.yaml
         run: |
           if [[ "$RUNNER_OS" == "macOS" ]] && [[ "$(uname -m)" == "arm64" ]]; then
