@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [ubuntu-latest, windows-latest]
         python-version: [3.9]
 
     steps:
@@ -67,45 +67,45 @@ jobs:
           pip3 install pysam
 
 
-#      - name: Install Homebrew dependencies (macOS only)
-#        if: startsWith(matrix.os, 'macos')
-#        shell: bash
-#        run: |
-#          brew update
-#
-#           # Install required libraries
-#          brew install mysql-client mariadb-connector-c
-#
-#          # Add mysql-client and mariadb-connector-c to PATH
-#          echo 'export PATH="/usr/local/opt/mysql-client/bin:$PATH"' >> ~/.bash_profile
-#          echo 'export PATH="/usr/local/opt/mariadb-connector-c/bin:$PATH"' >> ~/.bash_profile
-#          echo 'export PKG_CONFIG_PATH="/usr/local/opt/mariadb-connector-c/lib/pkgconfig"' >> ~/.bash_profile
-#
-#          # Set flags for compiling against mariadb-connector-c
-#          echo 'export LDFLAGS="-L/usr/local/opt/mariadb-connector-c/lib"' >> ~/.bash_profile
-#          echo 'export CPPFLAGS="-I/usr/local/opt/mariadb-connector-c/include"' >> ~/.bash_profile
-#
-#          # Source the updated shell profile to apply changes
-#          source ~/.bash_profile
-#
-#          # Install MySQL and MariaDB client libraries
-#          brew install mysql-client
-#          brew install mariadb-connector-c
-#
-#          # Ensure pip is available and up to date
-#          python3 -m ensurepip --upgrade
-#          python3 -m pip install --upgrade pip
-#
-#          # Install Python packages
-#          pip3 install mysql-connector-python
-#          pip3 install mariadb
-#          pip3 install snowflake-id
-#          pip3 install pysam
+      - name: Install Homebrew dependencies (macOS < 14 only)
+        if: startsWith(matrix.os, 'macos') && matrix.os != 'macos-14'
+        shell: bash
+        run: |
+          brew update
+
+           # Install required libraries
+          brew install mysql-client mariadb-connector-c
+
+          # Add mysql-client and mariadb-connector-c to PATH
+          echo 'export PATH="/usr/local/opt/mysql-client/bin:$PATH"' >> ~/.bash_profile
+          echo 'export PATH="/usr/local/opt/mariadb-connector-c/bin:$PATH"' >> ~/.bash_profile
+          echo 'export PKG_CONFIG_PATH="/usr/local/opt/mariadb-connector-c/lib/pkgconfig"' >> ~/.bash_profile
+
+          # Set flags for compiling against mariadb-connector-c
+          echo 'export LDFLAGS="-L/usr/local/opt/mariadb-connector-c/lib"' >> ~/.bash_profile
+          echo 'export CPPFLAGS="-I/usr/local/opt/mariadb-connector-c/include"' >> ~/.bash_profile
+
+          # Source the updated shell profile to apply changes
+          source ~/.bash_profile
+
+          # Install MySQL and MariaDB client libraries
+          brew install mysql-client
+          brew install mariadb-connector-c
+
+          # Ensure pip is available and up to date
+          python3 -m ensurepip --upgrade
+          python3 -m pip install --upgrade pip
+
+          # Install Python packages
+          pip3 install mysql-connector-python
+          pip3 install mariadb
+          pip3 install snowflake-id
+          pip3 install pysam
 
 
       - name: Choose correct meta.yaml
         run: |
-          if [[ "$RUNNER_OS" == "macOS" ]] && [[ "$(uname -m)" == "arm64" ]]; then
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
             cp conda-recipe/meta-osx-arm64.yaml conda-recipe/meta.yaml
           else
             cp conda-recipe/meta-default.yaml conda-recipe/meta.yaml
