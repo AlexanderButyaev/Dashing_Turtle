@@ -69,7 +69,7 @@ jobs:
 
 
       - name: Install Homebrew dependencies (macOS < 14 only)
-        if: startsWith(matrix.os, 'macos') && matrix.os != 'macos-14'
+        if: startsWith(matrix.os, 'macos') && matrix.os != 'macos-14' && matrix.os != 'macos-latest'
         shell: bash
         run: |
           brew update
