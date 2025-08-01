@@ -61,6 +61,7 @@ requirements:
     - matplotlib >=3.5,<3.7
     - drawsvg <=1.9.0
     - svgpathtools <=1.4.1
+    - pysam
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
