@@ -15,6 +15,10 @@ requirements:
   host:
     - python =3.9
     - pip
+    - cmake         # needed to build mariadb-connector-c
+    - make          # or equivalent build tool
+    - gcc           # compiler; use clang on macOS if needed
+    - git           # for cloning mariadb-connector-c source
   run:
     - python =3.9
     - pip
