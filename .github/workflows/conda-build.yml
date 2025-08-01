@@ -20,6 +20,35 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Choose correct meta.yaml
+        run: |
+          if [[ "$RUNNER_OS" == "macOS" ]]; then
+            cp conda-recipe/meta-osx-arm64.yaml conda-recipe/meta.yaml
+          else
+            cp conda-recipe/meta-default.yaml conda-recipe/meta.yaml
+          fi
+        shell: bash
+
+      - name: Set up Miniconda
+        uses: conda-incubator/setup-miniconda@v3
+        with:
+          activate-environment: build-env
+          channels: conda-forge, bioconda
+          python-version: ${{ matrix.python-version }}
+          use-only-tar-bz2: true
+
+      - name: Set channel priority
+        run: |
+          conda config --add channels conda-forge
+          conda config --add channels defaults
+          conda config --set channel_priority strict
+
+      - name: Create conda build environment
+        run: conda create -n build-env python=${{ matrix.python-version }} -y
+
+      - name: Install build dependencies
+        run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
+
       - name: Patch requirements.txt to remove mariadb on Ubuntu
         if: matrix.os == 'ubuntu-latest'
         run: |
@@ -60,12 +89,8 @@ jobs:
           python3 -m ensurepip --upgrade
           python3 -m pip install --upgrade pip
       
-          # Install required Python packages
-          pip3 install mariadb
-          pip3 install mysql-connector-python
-          pip3 install snowflake-id
-          pip3 install pysam
-          pip3 install PyQt6 PyQt6-sip PyQt6-Qt6
+          conda run -n build-env python -m pip install --upgrade pip
+          conda run -n build-env python -m pip install mariadb mysql-connector-python snowflake-id pysam PyQt6 PyQt6-sip PyQt6-Qt6
 
 
       - name: Install Homebrew dependencies (macOS < 14 only)
@@ -98,41 +123,12 @@ jobs:
           python3 -m pip install --upgrade pip
 
           # Install Python packages
+          # Activate conda env explicitly before pip installs
           pip3 install mysql-connector-python
           pip3 install mariadb
           pip3 install snowflake-id
           pip3 install pysam
           pip3 install PyQt6 PyQt6-sip PyQt6-Qt6
-
-
-      - name: Choose correct meta.yaml
-        run: |
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            cp conda-recipe/meta-osx-arm64.yaml conda-recipe/meta.yaml
-          else
-            cp conda-recipe/meta-default.yaml conda-recipe/meta.yaml
-          fi
-        shell: bash
-
-      - name: Set up Miniconda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          activate-environment: build-env
-          channels: conda-forge, bioconda
-          python-version: ${{ matrix.python-version }}
-          use-only-tar-bz2: true
-
-      - name: Set channel priority
-        run: |
-          conda config --add channels conda-forge
-          conda config --add channels defaults
-          conda config --set channel_priority strict
-
-      - name: Create conda build environment
-        run: conda create -n build-env python=${{ matrix.python-version }} -y
-
-      - name: Install build dependencies
-        run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
 
       - name: Build Conda package
         run: |
