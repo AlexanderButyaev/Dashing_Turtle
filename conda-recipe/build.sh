@@ -1,18 +1,14 @@
 #!/bin/bash
 set -euxo pipefail
 
-source "${CONDA_PREFIX}/etc/profile.d/conda.sh"
-conda activate "$BUILD_PREFIX"
-
 # Install from local wheels
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 
 if [[ "$(uname)" == "Darwin" && "$(uname -m)" == "arm64" ]]; then
-#  $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
-  #$PYTHON -m pip install mariadb --verbose
-  #$PYTHON -m pip install snowflake-id
-  #$PYTHON -m pip install PyQt6 PyQt6-sip PyQt6-Qt6
-  $PYTHON -m pip install pysam
+  $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+  #$PYTHON -m pip install mariadb --no-index --find-links=$SRC_DIR/conda-recipe/wheels
+  #$PYTHON -m pip install snowflake-id --no-index --find-links=$SRC_DIR/conda-recipe/wheels
+  #$PYTHON -m pip install pysam --no-index --find-links=$SRC_DIR/conda-recipe/wheels
 fi
 
 # Install the package using pip
