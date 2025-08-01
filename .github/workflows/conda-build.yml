@@ -43,7 +43,7 @@ jobs:
       
           # Install MySQL and MariaDB client libraries
           # brew install mysql-client
-          # brew install mariadb-connector-c
+          brew install mariadb-connector-c
       
           # Add MySQL client tools to PATH
           echo 'export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"' >> ~/.zprofile
