@@ -1,28 +1,6 @@
 #!/bin/bash
 set -euxo pipefail
 
-# Clone the mariadb-connector-c repo if source not already present
-if [ ! -d "mariadb-connector-c" ]; then
-  git clone https://github.com/MariaDB/mariadb-connector-c.git
-fi
-
-cd mariadb-connector-c
-
-# Create and enter a build directory
-mkdir -p build
-cd build
-
-# Configure the build with cmake
-cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX
-
-# Build
-make -j$(nproc)
-
-# Install to conda prefix
-make install
-
-# Install from local wheels
-$PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mariadb-1.1.13.tar.gz
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 
 #if [[ "$(uname)" == "Darwin" ]]; then
