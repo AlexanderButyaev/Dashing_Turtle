@@ -17,6 +17,7 @@ requirements:
     - pip
   run:
     - python =3.9
+    - pip
     - setuptools <81
     - cffi >=1.15
     - colorama >=0.4.6
@@ -60,7 +61,6 @@ requirements:
     - matplotlib >=3.5,<3.7
     - drawsvg <=1.9.0
     - svgpathtools <=1.4.1
-    - pip
 
 about:
   home: https://github.com/jwbear/Dashing_Turtle
