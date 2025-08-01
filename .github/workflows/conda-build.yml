@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-latest]
+        os: [macos-13]
         python-version: [3.9]
 
     steps:
@@ -42,8 +42,8 @@ jobs:
           brew update
       
           # Install MySQL and MariaDB client libraries
-          brew install mysql-client
-          brew install mariadb-connector-c
+          # brew install mysql-client
+          # brew install mariadb-connector-c
       
           # Add MySQL client tools to PATH
           echo 'export PATH="/opt/homebrew/opt/mysql-client/bin:$PATH"' >> ~/.zprofile
@@ -54,7 +54,7 @@ jobs:
           python3 -m pip install --upgrade pip
       
           # Install Python packages
-          pip3 install mysql-connector-python
+          pip3 install mariadb
           pip3 install snowflake-id
           pip3 install pysam
 
