@@ -1,6 +1,7 @@
 #!/bin/bash
 set -euxo pipefail
 
+# wheel/tar install
 $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/pysam-0.23.3.tar.gz
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mysql-connector-2.2.9.tar.gz
