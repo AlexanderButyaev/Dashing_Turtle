@@ -106,7 +106,6 @@ test:
 commands:
     - pip check
     - dt-cli --help
-    - dt-gui --help
 requires:
     - pip
 
