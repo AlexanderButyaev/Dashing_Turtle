@@ -4,8 +4,7 @@ set PY_VER=%PY_MAJOR%.%PY_MINOR%
 
 :: Install from local wheels
 %PYTHON% -m pip install --no-index --find-links=%SRC_DIR%\conda-recipe\wheels varnaapi
-@REM %PYTHON% -m pip install --no-index --find-links=%SRC_DIR%\conda-recipe\wheels PyQt6 PyQt6-sip PyQt6-Qt6
-
+%PYTHON% -m pip install %SRC_DIR%\conda-recipe\wheels\pysam-0.23.3.tar.gz
 %PYTHON% -m pip --no-index --find-links=%SRC_DIR%\conda-recipe\wheels pyqt6
 %PYTHON% -m pip --no-index --find-links=%SRC_DIR%\conda-recipe\wheels pyqt6-sip
 %PYTHON% -m pip --no-index --find-links=%SRC_DIR%\conda-recipe\wheels pyqt6-qt6
