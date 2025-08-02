@@ -14,7 +14,6 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest]
-        python-version: [3.11]
 
     steps:
       - name: Checkout repo
@@ -25,7 +24,6 @@ jobs:
         with:
           activate-environment: build-env
           channels: conda-forge, bioconda
-          python-version: ${{ matrix.python-version }}
           use-only-tar-bz2: true
 
       - name: Set channel priority
