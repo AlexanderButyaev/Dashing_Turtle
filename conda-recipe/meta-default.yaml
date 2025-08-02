@@ -13,11 +13,11 @@ include:
 
 requirements:
   host:
-    - python =3.9
+    - python =3.11
     - pip
     - pyqt >=6
   run:
-    - python =3.9
+    - python =3.11
     - setuptools <81
     - cffi ==1.17.1
     - colorama ==0.4.6

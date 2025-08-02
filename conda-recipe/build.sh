@@ -3,6 +3,20 @@ set -euxo pipefail
 
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 
+if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
+    echo "Running in GitHub Actions CI"
+    IS_CI=true
+else
+    echo "Running..."
+    IS_CI=false
+   $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mysql-connector-2.2.9.tar.gz
+   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels stack-data
+   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels svgpathtools
+   $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels matplotlib
+   #$PYTHON -m pip install pysam
+fi
+
 #if [[ "$(uname)" == "Darwin" ]]; then
   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels snowflake-id
