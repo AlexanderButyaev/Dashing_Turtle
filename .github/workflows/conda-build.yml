@@ -23,11 +23,15 @@ jobs:
       - name: Set up Miniforge
         uses: conda-incubator/setup-miniconda@v3
         with:
-          miniforge-variant: Mambaforge
+          miniforge-variant: Miniforge3  # <-- switch from Mambaforge
           use-mamba: true
           activate-environment: build-env
-          environment-file: ""
           auto-update-conda: true
+          auto-activate-base: true
+          remove-profiles: true
+          conda-solver: libmamba
+          clean-patched-environment-file: true
+          run-post: true
 
       - name: Install build dependencies
         run: mamba install -n build-env -c conda-forge conda-build anaconda-client -y
