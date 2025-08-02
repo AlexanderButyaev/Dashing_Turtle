@@ -16,7 +16,7 @@ requirements:
     - setuptools >=42
     - wheel
      {% if win %}
-    - pysam  # [win]
+    - pysam >=0.23.3 # [win]
     - mysql-connector-python # [win]
      {% endif %}
   run:
@@ -105,7 +105,7 @@ requirements:
     - wcwidth >=0.2.13
     - wrapt >=1.16.0
      {% if win %}
-    - pysam  # [win]
+    - pysam >=0.23.3 # [win]
     - mysql-connector-python # [win]
      {% endif %}
 test:

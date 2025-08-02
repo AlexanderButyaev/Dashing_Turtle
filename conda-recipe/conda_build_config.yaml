@@ -3,5 +3,5 @@ python:
 channels:
   - conda-forge
   - bioconda
-  - jwbear
   - defaults
+  - jwbear
