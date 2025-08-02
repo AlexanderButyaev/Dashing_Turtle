@@ -15,6 +15,10 @@ requirements:
     - pip
     - setuptools >=42
     - wheel
+     {% if win %}
+    - pysam  # [win]
+    - mysql-connector-python # [win]
+     {% endif %}
   run:
     - python =3.11
     - pip
@@ -100,6 +104,10 @@ requirements:
     - tzdata
     - wcwidth >=0.2.13
     - wrapt >=1.16.0
+     {% if win %}
+    - pysam  # [win]
+    - mysql-connector-python # [win]
+     {% endif %}
 test:
   imports:
     - DashML
