@@ -6,9 +6,11 @@ set PY_VER=%PY_MAJOR%.%PY_MINOR%
 %PYTHON% -m pip install --no-index --find-links=%SRC_DIR%\conda-recipe\wheels varnaapi
 @REM %PYTHON% -m pip install --no-index --find-links=%SRC_DIR%\conda-recipe\wheels PyQt6 PyQt6-sip PyQt6-Qt6
 
-$PYTHON% -m pip install mariadb
-$PYTHON% -m pip install snowflake-id
 $PYTHON% -m pip install pysam
+$PYTHON% -m pip install pyqt6
+$PYTHON% -m pip install pyqt6-sip
+$PYTHON% -m pip install pyqt6-qt6
+$PYTHON% -m pip install mysql-connector
 
 :: Install the package
 %PYTHON% -m pip install . --no-deps --ignore-installed -vv
