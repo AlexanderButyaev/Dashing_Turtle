@@ -36,7 +36,7 @@ jobs:
         run: conda create -n build-env python=${{ matrix.python-version }} -y
 
       - name: Install build dependencies
-        run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
+        run: conda install -n build-env -c conda-forge conda-build anaconda-client -y
 
       - name: Build Conda package
         run: |
