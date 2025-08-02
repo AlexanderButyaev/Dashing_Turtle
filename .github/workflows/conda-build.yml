@@ -13,21 +13,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [macos-13]
+        os: [ubuntu-latest]
         python-version: [3.11]
 
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Choose correct meta.yaml
-        run: |
-          if [[ "$RUNNER_OS" == "macOS" ]]; then
-            cp conda-recipe/meta-osx-arm64.yaml conda-recipe/meta.yaml
-          else
-            cp conda-recipe/meta-default.yaml conda-recipe/meta.yaml
-          fi
-        shell: bash
 
       - name: Set up Miniconda
         uses: conda-incubator/setup-miniconda@v3
@@ -48,23 +39,6 @@ jobs:
 
       - name: Install build dependencies
         run: conda install -n build-env -c conda-forge conda-build anaconda-client conda-verify libarchive -y
-
-      - name: Patch requirements.txt to remove mariadb on Ubuntu
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sed -i '/^mariadb[<>= ]*/d' requirements.txt
-
-      - name: Install APT dependencies (Ubuntu only)
-        if: matrix.os == 'ubuntu-latest'
-        run: |
-          sudo apt-get update
-          sudo apt install -y libmariadb3 libmariadb-dev
-          sudo apt install -y python3 python3-pip
-          sudo apt install -y python3-mysqldb 
-          pip3 install mariadb
-          pip3 install snowflake-id
-          pip3 install pysam
-
 
       - name: Build Conda package
         run: |
