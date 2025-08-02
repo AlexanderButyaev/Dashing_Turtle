@@ -35,8 +35,8 @@ jobs:
 
       - name: Install build tools and build recipe
         run: |
-          conda run -n build-env mamba install -c conda-forge conda-build anaconda-client conda-verify -y
-          conda run -n build-env mamba build conda-recipe
+          conda run -n build-env --no-capture-output mamba install -c conda-forge conda-build anaconda-client conda-verify -y
+          conda run -n build-env --no-capture-output mamba build conda-recipe --python ${{ matrix.python-version }}
 
 #      - name: Upload to Anaconda (Unix)
 #        if: runner.os != 'Windows' && github.ref == 'refs/heads/main'
