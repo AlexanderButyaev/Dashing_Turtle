@@ -15,9 +15,6 @@ requirements:
     - pip
     - setuptools >=42
     - wheel
-    - mysql-connector-python
-    - mariadb-connector-c >=3.4.6
-    - mariadb >=1.1.10
   run:
     - python =3.11
     - pip
