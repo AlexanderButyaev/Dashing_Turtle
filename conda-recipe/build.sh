@@ -4,7 +4,9 @@ set -euxo pipefail
 $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/pysam-0.23.3.tar.gz
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mysql-connector-2.2.9.tar.gz
-$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
+$PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/pyqt6-6.9.1.tar.gz
+$PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/pyqt6_sip-13.10.2.tar.gz
+$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6-Qt6
 
 # Install the package using pip
 $PYTHON -m pip install . --no-deps --ignore-installed -vv
