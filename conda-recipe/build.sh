@@ -3,25 +3,9 @@ set -euxo pipefail
 
 $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels varnaapi
 
-if [[ "${GITHUB_ACTIONS:-false}" == "true" ]]; then
-    echo "Running in GitHub Actions CI"
-    IS_CI=true
-else
-    echo "Running..."
-    IS_CI=false
-   $PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mysql-connector-2.2.9.tar.gz
-   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels stack-data
-   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels svgpathtools
-   $PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
-   #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels matplotlib
-   #$PYTHON -m pip install pysam
-fi
 
-#if [[ "$(uname)" == "Darwin" ]]; then
-  #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
-  #$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels snowflake-id
-  #$PYTHON -m pip install pysam --no-index --find-links=$SRC_DIR/conda-recipe/wheels/pysam-0.23.3-cp39-cp39-macosx_11_0_arm64.whl
-#fi
+$PYTHON -m pip install $SRC_DIR/conda-recipe/wheels/mysql-connector-2.2.9.tar.gz
+$PYTHON -m pip install --no-index --find-links=$SRC_DIR/conda-recipe/wheels PyQt6 PyQt6-sip PyQt6-Qt6
 
 # Install the package using pip
 $PYTHON -m pip install . --no-deps --ignore-installed -vv
