@@ -9,7 +9,6 @@ def parse_requirements(filename):
 
 setup(
     name="DashingTurtle",
-    version="0.1.6",
     author="J. White Bear",
     author_email="jwbear15@gmail.com",
     description="An applicaton for building structural landscapes of RNA sequence modifications with Nanopore data.",
@@ -19,6 +18,8 @@ setup(
     packages=find_packages(),
     install_requires=parse_requirements("requirements.txt"),
     include_package_data=True,
+    use_scm_version=True,
+    setup_requires=['setuptools_scm'],
     package_data={
         "DashML.Varna": ["VARNAv3-93.jar"],
     },

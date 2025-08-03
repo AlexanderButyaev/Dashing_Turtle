@@ -114,6 +114,7 @@ requires:
 about:
   home: https://github.com/jwbear/Dashing_Turtle
   license: MIT
+  license_file: LICENSE
   summary: "An application for building structural landscapes of RNA sequence modifications with Nanopore data."
 
 extra:
