@@ -50,7 +50,7 @@ You’ll now configure the local Python environment for running the app.
 
 .. code-block:: bash
 
-   python -m venv venv
+   python3.11 -m venv myvenv
 
 **2. Activate the environment**
 
