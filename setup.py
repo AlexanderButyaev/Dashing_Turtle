@@ -10,6 +10,7 @@ def parse_requirements(filename):
 setup(
     name="DashingTurtle",
     author="J. White Bear",
+    version="0.1.7",
     author_email="jwbear15@gmail.com",
     description="An applicaton for building structural landscapes of RNA sequence modifications with Nanopore data.",
     long_description=open("README.md").read(),

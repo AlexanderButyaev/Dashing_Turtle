@@ -36,7 +36,7 @@ docker compose up -d db
 🐍 Step 4: Set up Python environment (local app)
 ✅ Create a virtual environment
 
-python -m venv venv
+python3.11 -m venv venv
 
 ✅ Activate it
 
