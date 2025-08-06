@@ -13,6 +13,7 @@ DashingTurtle is a toolkit for analyzing and visualizing RNA chemical probing da
 
    installation
    usage
+   troubleshooting
    modules
 
 Indices and Tables

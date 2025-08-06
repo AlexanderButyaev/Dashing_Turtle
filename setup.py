@@ -10,7 +10,7 @@ def parse_requirements(filename):
 setup(
     name="DashingTurtle",
     author="J. White Bear",
-    version="0.1.7",
+    version="0.1.19",
     author_email="jwbear15@gmail.com",
     description="An applicaton for building structural landscapes of RNA sequence modifications with Nanopore data.",
     long_description=open("README.md").read(),
@@ -32,6 +32,7 @@ setup(
     python_requires=">=3.7",
     entry_points={
         "console_scripts": [
+            "dt-db=DashML.db.dt_db:main",
             "dt-cli = DashML.UI.DT_CLI:main",
             "dt-gui = DashML.GUI.DT:main",
         ],

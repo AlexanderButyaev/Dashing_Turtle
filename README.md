@@ -14,7 +14,7 @@ https://www.tbi.univie.ac.at/RNA/ViennaRNA/doc/html/install.html
 Step 2: Install Docker (for the database)
 
 Dashing Turtle needs a database to store your data. We use Docker to make this easy and automatic.
-✅ Windows / macOS
+✅  macOS
 
     Download and install Docker Desktop: https://www.docker.com/products/docker-desktop/
 
@@ -23,12 +23,6 @@ Dashing Turtle needs a database to store your data. We use Docker to make this e
 ✅ Linux
 
     Install Docker Engine: Docker Engine Linux install guide
-
-🔥 Step 3: Start the database
-
-Open your terminal or command prompt, navigate to your project folder, and run:
-
-docker compose up -d db
 
 ✔ This will download and start the database in the background.
 ✔ It will keep your data even after shutting down.
@@ -44,9 +38,6 @@ python3.11 -m venv venv
 
 source venv/bin/activate
 
-    Windows:
-
-venv\Scripts\activate
 
 ✅ Upgrade pip
 
@@ -59,6 +50,11 @@ Dashing Turtle is also distributed via PyPI as DashingTurtle. Install it:
 pip install DashingTurtle
 
 💻 Step 5: Run the application
+
+✅ Start the Database
+
+dt-db up
+
 ✅ Graphical User Interface (GUI)
 
 dt-gui
@@ -75,11 +71,11 @@ dt-cli
 
     You can stop it any time using:
 
-docker compose down
+dt-db down
 
     To restart:
 
-docker compose up -d db
+dt-db up
 
 💬 Help
 
@@ -91,6 +87,10 @@ Data including landscape files and figures are output to your home directory und
 
 🔥 Sample Data for testing is available at https://github.com/jwbear/Dashing_Turtle.git
 
+
+## Getting Help
+
+If you run into issues or need troubleshooting advice, please check our [Troubleshooting Guide on Read the Docs](https://dashing-turtle.readthedocs.io/en/latest/docs/troubleshooting.html).
 
 
 🎉 That’s it!

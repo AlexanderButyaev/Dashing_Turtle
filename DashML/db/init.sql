@@ -73,10 +73,10 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Del_CentroidSecondaryIntrx` (IN `lid1
 		BEGIN
 			DELETE FROM Centroid_Secondary_Interactions
 			WHERE SSID IN (@ssid);
-		
+
 			DELETE FROM Centroid_Probabilities
 			WHERE SSID IN (@ssid);
-		
+
 			DELETE FROM Centroid_BPP
 			WHERE SSID IN (@ssid);
 		END;
@@ -156,10 +156,10 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Del_StructureSecondaryIntrx` (IN `lid
 		BEGIN
 			DELETE FROM Structure_Secondary_Interactions
 			WHERE SSID=@ssid;
-		
+
 			DELETE FROM Structure_Probabilities
 			WHERE SSID=@ssid;
-		
+
 			DELETE FROM Structure_BPP
 			WHERE SSID=@ssid;
 		END;
@@ -171,7 +171,7 @@ DROP PROCEDURE IF EXISTS `Gmm_Control`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Gmm_Control` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.`position`, g.Predict as 'gmm', sc.predict as 'control'
 	FROM Gmm g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -180,7 +180,7 @@ DROP PROCEDURE IF EXISTS `Gmm_Structure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Gmm_Structure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.`position`, g.Predict as 'gmm', s.base_type, s.metric
 	FROM Gmm g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -200,15 +200,18 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Ins_StructureLibrary`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Ins_StructureLibrary` (IN `lid` INT, IN `contigs` VARCHAR(50), OUT `msid` INT)   BEGIN
-	-- insert structure id, same for mod and unmodifed, by get max current sid
-	SELECT MAX(SID) INTO @msid FROM Structure_Library WHERE contig=contigs; 
-	IF @msid IS NULL 
+	SELECT MAX(SID) INTO @msid FROM Structure_Library WHERE contig=contigs;
+	IF @msid IS NULL
 	THEN
 		SELECT MAX(SID)+1 INTO @msid FROM Structure_Library;
+		IF @msid IS NULL
+		THEN
+			SELECT @msid := 1;
+		END IF;
 	END IF;
-	-- insert into structure library joiner table
+
 	INSERT INTO Structure_Library (LID, SID, contig)
-	VALUES (lid, @msid,contigs);	
+	VALUES (lid, @msid,contigs);
 	SELECT @msid;
 END$$
 
@@ -234,7 +237,7 @@ END$$
 DROP PROCEDURE IF EXISTS `SelectCentroids`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectCentroids` (IN `lids` TEXT)   BEGIN
 	SELECT c.LID, c.contig, position, cluster, centroid as 'reactivity', method, l.sequence
-	FROM Centroids c 
+	FROM Centroids c
 	INNER JOIN Library l ON l.ID=c.LID
 	WHERE c.LID IN (lids)
 	ORDER BY c.LID, c.contig, position, cluster, method;
@@ -243,8 +246,8 @@ END$$
 DROP PROCEDURE IF EXISTS `SelectClusters`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectClusters` (IN `contig` VARCHAR(255), IN `temp` INT, IN `type1` VARCHAR(255), IN `type2` VARCHAR(255), IN `complex` INT, IN `method` VARCHAR(100))   BEGIN
 	SELECT contig, position, cluster, centroid, method
-	FROM Centroids c 
-	INNER JOIN Library l ON l.LID=c.LID
+	FROM Centroids c
+	INNER JOIN Library l ON l.ID=c.LID
 	WHERE l.contig=contig AND l.temp=temp AND l.type1=type1 AND l.type2=type2 AND l.complex=complex AND c.method=method
 	ORDER BY contig, position, cluster;
 END$$
@@ -273,14 +276,14 @@ END$$
 
 DROP PROCEDURE IF EXISTS `SelectMaxStructureProbabilities`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectMaxStructureProbabilities` (IN `ssid` BIGINT)   BEGIN
-	SELECT LID, base as 'position', read_index, MAX(max) as 'base_pair_prob' 
-	FROM (SELECT LID, base1 as 'base', read_index, MAX(probability) as 'max' 
+	SELECT LID, base as 'position', read_index, MAX(max) as 'base_pair_prob'
+	FROM (SELECT LID, base1 as 'base', read_index, MAX(probability) as 'max'
 	FROM  Structure_Secondary_Interactions ssi
 	INNER JOIN Structure_BPP sb ON sb.SSID=ssi.SSID
 	INNER JOIN Structure_Probabilities sp  ON sp.SSID=ssi.SSID
 	WHERE ssi.SSID=ssid AND ssi.type='MFE' AND type_interaction IN ('A', 'AA')
 	GROUP BY base1, type_interaction
-	UNION 
+	UNION
 	SELECT LID, base2 as 'base', read_index, MAX(probability)
 	FROM  Structure_Secondary_Interactions ssi
 	INNER JOIN Structure_BPP sb ON sb.SSID=ssi.SSID
@@ -308,8 +311,8 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectPeaks` (IN `mod_lids` TEXT, IN 
 		FROM Unmodified d
 		WHERE d.LID IN (unmod_lids)
 		GROUP BY contig, `position`;
-	
-	SELECT a.LID, a.contig, a.position, a.read_index, (ABS(event_length) - ABS(event_length_dmso)) as 'delta_dwell', (ABS(event_level_mean) - ABS(event_level_mean_dmso)) as 'delta_signal'   
+
+	SELECT a.LID, a.contig, a.position, a.read_index, (ABS(event_length) - ABS(event_length_dmso)) as 'delta_dwell', (ABS(event_level_mean) - ABS(event_level_mean_dmso)) as 'delta_signal'
 	FROM Modified a
 	INNER JOIN t1 ON t1.contig=a.contig AND t1.position=a.position
 	WHERE a.LID IN (mod_lids)
@@ -321,16 +324,16 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectPredict` (IN `lids` TEXT)   BEG
 	DROP TEMPORARY TABLE IF EXISTS t1;
 	DROP TEMPORARY TABLE IF EXISTS s1;
 	DROP TEMPORARY TABLE IF EXISTS s2;
-	
+
 	CREATE TEMPORARY TABLE t1 AS
 		SELECT DISTINCT read_index FROM Peaks s
 		WHERE s.LID IN (lids);
-	
+
 	CREATE TEMPORARY TABLE s1 AS
-		SELECT DISTINCT LID, s.contig, position, sequence FROM `Structure` s 
+		SELECT DISTINCT LID, s.contig, position, sequence FROM `Structure` s
 		LEFT JOIN Structure_Library sl ON sl.SID=s.SID
 		WHERE LID IN (lids);
-	
+
 	CREATE TEMPORARY TABLE s2
 		(UNIQUE struct (LID, contig, read_index, position)) AS
 		SELECT LID, contig, read_index, position, sequence FROM t1
@@ -341,61 +344,32 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectPredict` (IN `lids` TEXT)   BEG
 	LEFT JOIN Basecall_Peaks b ON b.LID=St.LID AND b.`position`=St.`position`
 	LEFT JOIN Gmm g ON g.LID=St.LID AND g.`position`=St.`position`
 	LEFT JOIN Peaks p ON p.LID=St.LID AND p.read_index=St.read_index AND p.`position`=St.`position`
-	LEFT JOIN Lof ld ON ld.LID=St.LID  AND ld.read_index=St.read_index  AND ld.`position`=St.`position` 
+	LEFT JOIN Lof ld ON ld.LID=St.LID  AND ld.read_index=St.read_index  AND ld.`position`=St.`position`
 	WHERE St.LID IN (lids)) f
 	ORDER BY LID, read_index, `position`;
-END$$
-
-DROP PROCEDURE IF EXISTS `SelectPredictControl`$$
-CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectPredictControl` (IN `lids` TEXT)   BEGIN
-	DROP TEMPORARY TABLE IF EXISTS t1;
-	DROP TEMPORARY TABLE IF EXISTS s1;
-	DROP TEMPORARY TABLE IF EXISTS s2;
-	
-	CREATE TEMPORARY TABLE t1 AS
-		SELECT DISTINCT read_index FROM Peaks s
-		WHERE s.LID IN (lids);
-	
-	CREATE TEMPORARY TABLE s1 AS
-		SELECT DISTINCT LID, contig, position, sequence FROM `Structure` s 
-		WHERE s.LID IN (lids);
-	
-	CREATE TEMPORARY TABLE s2
-		(UNIQUE struct (LID, contig, read_index, position)) AS
-		SELECT LID, contig, read_index, position, sequence FROM t1
-		CROSS JOIN s1;
-
-	SELECT * FROM (SELECT St.LID, St.contig, St.read_index, St.position, St.sequence as 'Sequence', b.predict as 'Predict_BC',  p.predict_signal as 'Predict_Signal', p.predict_dwell as 'Predict_Dwell', ld.predict_dwell as 'Predict_Lofd', ld.predict_signal as 'Predict_Lofs', g.predict as 'Predict_Gmm'
-	FROM s2 as St
-	LEFT JOIN Basecall_Peaks b ON b.LID=St.LID AND b.`position`=St.`position`
-	LEFT JOIN Gmm g ON g.LID=St.LID AND g.`position`=St.`position`
-	LEFT JOIN Peaks p ON p.LID=St.LID AND p.read_index=St.read_index AND p.`position`=St.`position`
-	LEFT JOIN Lof ld ON ld.LID=St.LID  AND ld.read_index=St.read_index  AND ld.`position`=St.`position` 
-	WHERE St.LID IN (lids)) f
-	ORDER BY contig, read_index, `position`;
 END$$
 
 DROP PROCEDURE IF EXISTS `SelectReadDepthFull`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `SelectReadDepthFull` (IN `lids` TEXT)   BEGIN
 	DROP TEMPORARY TABLE IF EXISTS T2;
-	CREATE TEMPORARY TABLE IF NOT EXISTS T2 AS 
+	CREATE TEMPORARY TABLE IF NOT EXISTS T2 AS
 	(SELECT read_index, COUNT(position) as 'cp'
-	FROM Modified m 
+	FROM Modified m
 	WHERE LID IN (lids)
 	GROUP BY read_index
-	UNION 
+	UNION
 	SELECT read_index, COUNT(position) as 'cp'
-	FROM Unmodified u 
+	FROM Unmodified u
 	WHERE LID IN (lids)
 	GROUP BY read_index);
 
 	SELECT AVG(cp) INTO @avgcp FROM T2;
-	
+
 	DROP TEMPORARY TABLE IF EXISTS LR;
-	CREATE TEMPORARY TABLE IF NOT EXISTS LR AS 
+	CREATE TEMPORARY TABLE IF NOT EXISTS LR AS
 	(SELECT read_index FROM T2
 	WHERE T2.cp >= @avgcp);
-	
+
 	SELECT St.contig, CONCAT(St.read_index,St.LID) as read_id, St.read_index, St.position, St.sequence as 'Sequence', St.Reactivity_Score as 'Reactivity', St.Predict, St.LID
 	FROM Read_depth_full as St
 	INNER JOIN Library l ON l.ID=St.LID
@@ -425,7 +399,7 @@ DROP PROCEDURE IF EXISTS `Select_BcControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_BcControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.`position`, g.predict, sc.predict as 'control'
 	FROM Basecall_Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -434,7 +408,7 @@ DROP PROCEDURE IF EXISTS `Select_BcStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_BcStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.`position`, g.predict, s.base_type, s.metric
 	FROM Basecall_Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -454,7 +428,7 @@ DROP PROCEDURE IF EXISTS `Select_DwellControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_DwellControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_dwell as 'predict', sc.predict as 'control'
 	FROM Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -463,7 +437,7 @@ DROP PROCEDURE IF EXISTS `Select_DwellStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_DwellStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_dwell as 'predict', s.base_type, s.metric
 	FROM Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -481,7 +455,7 @@ DROP PROCEDURE IF EXISTS `Select_LofdControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_LofdControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_dwell as 'predict', sc.predict as 'control'
 	FROM Lof g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -490,7 +464,7 @@ DROP PROCEDURE IF EXISTS `Select_LofdStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_LofdStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_dwell as 'predict', s.base_type, s.metric
 	FROM Lof g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -499,7 +473,7 @@ DROP PROCEDURE IF EXISTS `Select_LofsControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_LofsControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_signal as 'predict', sc.predict as 'control'
 	FROM Lof g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -508,15 +482,15 @@ DROP PROCEDURE IF EXISTS `Select_LofsStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_LofsStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_signal as 'predict', s.base_type, s.metric
 	FROM Lof g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
 
 DROP PROCEDURE IF EXISTS `Select_MaxClusters`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_MaxClusters` (IN `lids` TEXT)   BEGIN
-	SELECT LID, c.contig, cluster, method, COUNT(*)/l.sequence_len as 'cluster_size' 
-	FROM Clusters c 
+	SELECT LID, c.contig, cluster, method, COUNT(*)/l.sequence_len as 'cluster_size'
+	FROM Clusters c
 	INNER JOIN Library l ON l.ID=c.LID
 	WHERE LID IN (lids)
 	GROUP BY cluster, method
@@ -528,7 +502,7 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ModLID` (IN `lids` TEXT)   BEG
 	SELECT d.LID, d.contig, read_index, `position`, event_level_mean, event_length, l.run, l.temp, l.complex, l.type1, l.type2
 	FROM Library l
 	INNER JOIN Modified d ON d.LID=l.ID
-	WHERE d.LID IN (`lids`) 
+	WHERE d.LID IN (`lids`)
 	ORDER BY contig, read_index, `position`, run, temp;
 END$$
 
@@ -541,8 +515,8 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_PeaksUnmod` (IN `mod_lids` TEX
 		FROM Unmodified d
 		WHERE d.LID IN (unmod_lids)
 		GROUP BY contig, `position`;
-	
-	SELECT a.LID, a.contig, a.position, a.read_index, (ABS(event_length) - ABS(event_length_dmso)) as 'delta_dwell', (ABS(event_level_mean) - ABS(event_level_mean_dmso)) as 'delta_signal'   
+
+	SELECT a.LID, a.contig, a.position, a.read_index, (ABS(event_length) - ABS(event_length_dmso)) as 'delta_dwell', (ABS(event_level_mean) - ABS(event_level_mean_dmso)) as 'delta_signal'
 	FROM Unmodified a
 	INNER JOIN t1 ON t1.contig=a.contig AND t1.position=a.position
 	WHERE a.LID IN (mod_lids)
@@ -552,7 +526,7 @@ END$$
 DROP PROCEDURE IF EXISTS `Select_PutativeStructures`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_PutativeStructures` (IN `lids` TEXT)   BEGIN
 	SELECT l.ID, l.contig, l.sequence, l.sequence_len, cs.secondary, cs.cluster, cs.mfe, cs.`method`
-	FROM Library l 
+	FROM Library l
 	INNER JOIN Centroid_Secondary cs ON cs.LID=l.ID
 	WHERE cs.LID IN (lids) AND cs.type='MFE' AND cs.mfe <> 0;
 END$$
@@ -564,8 +538,8 @@ END$$
 
 DROP PROCEDURE IF EXISTS `Select_RdfContinue`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_RdfContinue` (IN `lids` TEXT, IN `lids2` TEXT)   BEGIN
-	SELECT ssi.LID, ssi.read_index, 1 as 'completed' 
-	FROM Structure_Secondary_Interactions ssi 
+	SELECT ssi.LID, ssi.read_index, 1 as 'completed'
+	FROM Structure_Secondary_Interactions ssi
 	INNER JOIN Structure_BPP sb ON sb.SSID =ssi.SSID
 	INNER JOIN Structure_Probabilities sp ON sp.SSID =sb.SSID AND sp.BPPID =sb.BPPID
 	WHERE ssi.LID IN (lids) AND ssi.LID2 IN (lids2)
@@ -576,7 +550,7 @@ DROP PROCEDURE IF EXISTS `Select_RDFControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_RDFControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.Predict as 'predict', sc.predict as 'control'
 	FROM Read_depth_full g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -591,7 +565,7 @@ DROP PROCEDURE IF EXISTS `Select_RDFStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_RDFStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.Predict as 'predict', s.base_type, s.metric
 	FROM Read_depth_full g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -599,12 +573,12 @@ END$$
 DROP PROCEDURE IF EXISTS `Select_ReadDepth`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ReadDepth` (IN `lids` TEXT)   BEGIN
 	SELECT LID, position, COUNT(read_index) as 'read_depth'
-	FROM Unmodified u 
+	FROM Unmodified u
 	WHERE LID IN (lids)
 	GROUP BY LID, position
-	UNION 
+	UNION
 	SELECT LID, position, COUNT(read_index) as 'read_depth'
-	FROM Modified m 
+	FROM Modified m
 	WHERE LID IN (lids)
 	GROUP BY LID, position;
 END$$
@@ -613,7 +587,7 @@ DROP PROCEDURE IF EXISTS `Select_ReadDepthControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ReadDepthControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.`position`, g.Predict as 'predict', sc.predict as 'control'
 	FROM Read_depth g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -622,7 +596,7 @@ DROP PROCEDURE IF EXISTS `Select_ReadDepthStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ReadDepthStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.`position`, g.Predict as 'predict', s.base_type, s.metric
 	FROM Read_depth g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -647,7 +621,7 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ShapeControl` (IN `lids` TEXT,
 	SELECT sl.LID, g.`position`, g.predict, sc.predict as 'control', s.base_type, s.metric
 	FROM Structure_Control g
 	INNER JOIN Structure_Control sc ON sc.SID=g.SID AND sc.position=g.position
-	INNER JOIN Structure_Library sl ON sl.SID=g.SID 
+	INNER JOIN Structure_Library sl ON sl.SID=g.SID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE sl.LID IN (lids) AND g.type=type1 AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -656,7 +630,7 @@ DROP PROCEDURE IF EXISTS `Select_SignalControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_SignalControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_signal as 'predict', sc.predict as 'control'
 	FROM Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -665,7 +639,7 @@ DROP PROCEDURE IF EXISTS `Select_SignalStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_SignalStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.predict_signal as 'predict', s.base_type, s.metric
 	FROM Peaks g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
@@ -675,16 +649,16 @@ CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_UnmodLID` (IN `lids` TEXT)   B
 	SELECT d.LID, d.contig, read_index, `position`, event_level_mean, event_length, l.run, l.temp, l.complex, l.type1, l.type2
 	FROM Library l
 	INNER JOIN Unmodified d ON d.LID=l.ID
-	WHERE d.LID IN (`lids`) 
+	WHERE d.LID IN (`lids`)
 	ORDER BY contig, read_index, `position`, run, temp;
 END$$
 
 DROP PROCEDURE IF EXISTS `Select_UnmodSSI`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_UnmodSSI` ()   BEGIN
 	SELECT l.ID as 'LID'
-	FROM Library l 
+	FROM Library l
 	WHERE l.ID NOT IN (SELECT l.ID
-	FROM Library l 
+	FROM Library l
 	LEFT JOIN Structure_Secondary_Interactions ssi ON ssi.LID =l.ID
 	WHERE l.is_modified = 0 AND ssi.read_index=-2
 	GROUP BY l.ID) AND l.is_modified =0;
@@ -694,7 +668,7 @@ DROP PROCEDURE IF EXISTS `Select_ViennaControl`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ViennaControl` (IN `lids` TEXT, IN `types` VARCHAR(100))   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.Base_pair_prob as 'predict', sc.predict as 'control'
 	FROM Read_depth_full g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure_Control sc ON sc.SID=sl.SID AND sc.`position`=g.`position`
 	WHERE g.LID IN (lids) AND FIND_IN_SET(sc.type,`types`);
 END$$
@@ -703,58 +677,58 @@ DROP PROCEDURE IF EXISTS `Select_ViennaStructure`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Select_ViennaStructure` (IN `lids` TEXT)   BEGIN
 	SELECT g.LID, g.read_index, g.`position`, g.Base_pair_prob as 'predict', s.base_type, s.metric
 	FROM Read_depth_full g
-	INNER JOIN Structure_Library sl ON sl.LID=g.LID 
+	INNER JOIN Structure_Library sl ON sl.LID=g.LID
 	INNER JOIN Structure s ON s.SID=sl.SID AND s.`position`=g.`position`
 	WHERE g.LID IN (lids);
 END$$
 
 DROP PROCEDURE IF EXISTS `Update_BPP`$$
 CREATE DEFINER=`dtuser`@`172.%` PROCEDURE `Update_BPP` (IN `lids` TEXT, IN `threshold` FLOAT, IN `rx_threshold` FLOAT)   BEGIN
-	UPDATE Read_depth_full rdf 
-	INNER JOIN 
+	UPDATE Read_depth_full rdf
+	INNER JOIN
 	(SELECT LID, base, read_index, MAX(max_prob) AS max_prob
 	FROM (
-	    SELECT 
-	        rdf.LID, 
-	        sp.base1 - 1 AS base, 
-	        ssi.read_index, 
+	    SELECT
+	        rdf.LID,
+	        sp.base1 - 1 AS base,
+	        ssi.read_index,
 	        MAX(sp.probability) AS max_prob
 	    FROM Read_depth_full rdf
-	    JOIN Structure_Secondary_Interactions ssi 
+	    JOIN Structure_Secondary_Interactions ssi
 	        ON ssi.LID2 = rdf.LID AND ssi.read_index = rdf.read_index
-	    JOIN Structure_BPP sb 
+	    JOIN Structure_BPP sb
 	        ON sb.SSID = ssi.SSID
-	    JOIN Structure_Probabilities sp 
+	    JOIN Structure_Probabilities sp
 	        ON sp.SSID = ssi.SSID
-	    WHERE rdf.LID IN (`lids`) 
-	        AND ssi.type = 'MFE' 
+	    WHERE rdf.LID IN (`lids`)
+	        AND ssi.type = 'MFE'
 	        AND sb.type_interaction IN ('A', 'AA')
 	    GROUP BY rdf.LID, sp.base1, ssi.read_index
-	
+
 	    UNION
-	
-	    SELECT 
-	        rdf.LID, 
-	        sp.base2 - 1 AS base, 
-	        ssi.read_index, 
+
+	    SELECT
+	        rdf.LID,
+	        sp.base2 - 1 AS base,
+	        ssi.read_index,
 	        MAX(sp.probability) AS max_prob
 	    FROM Read_depth_full rdf
-	    JOIN Structure_Secondary_Interactions ssi 
+	    JOIN Structure_Secondary_Interactions ssi
 	        ON ssi.LID2 = rdf.LID AND ssi.read_index = rdf.read_index
-	    JOIN Structure_BPP sb 
+	    JOIN Structure_BPP sb
 	        ON sb.SSID = ssi.SSID
-	    JOIN Structure_Probabilities sp 
+	    JOIN Structure_Probabilities sp
 	        ON sp.SSID = ssi.SSID
-	    WHERE rdf.LID IN (`lids`) 
-	        AND ssi.type = 'MFE' 
+	    WHERE rdf.LID IN (`lids`)
+	        AND ssi.type = 'MFE'
 	        AND sb.type_interaction IN ('A', 'AA')
 	    GROUP BY rdf.LID, sp.base2, ssi.read_index
 	) AS C
 	GROUP BY base, read_index) AS A ON rdf.LID=A.LID AND rdf.read_index=A.read_index AND rdf.position = A.base
 	SET rdf.base_pair_prob = A.max_prob, rdf.completed=1
 	WHERE rdf.LID IN (`lids`);
-	    
-	UPDATE Read_depth_full rdf 
+
+	UPDATE Read_depth_full rdf
 	SET rdf.Predict=1
 	WHERE rdf.LID IN (`lids`)  AND rdf.base_pair_prob > `threshold` AND rdf.Reactivity_score < `rx_threshold`;
 

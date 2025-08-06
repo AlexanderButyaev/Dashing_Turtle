@@ -133,7 +133,7 @@ class SelectSampleSection(QFrame):
 
         # Check required text fields
         sequence_txt = self.sequence_input.text().strip()
-        if not re.fullmatch(r"^[ACGTU]+$", sequence_txt, re.IGNORECASE):
+        if not re.fullmatch(r"^[ACGTUacgtu]+$", sequence_txt, re.IGNORECASE):
             errors.append("Sequence nucleotides must be ACGTU.")
 
         # Check required text fields
@@ -152,12 +152,9 @@ class SelectSampleSection(QFrame):
 
         # Check secondary structure and experiment consistency
         secondary = self.secondary_input.text().strip()
-        if not re.fullmatch(r"^[().]+$", secondary):
-            errors.append("[red]Error: Secondary structure must contain only '.', '(', and ')' characters.[/red]")
-
         experiment = self.experiment_input.text().strip()
 
-        if secondary:
+        if secondary != '':
             if not re.fullmatch(r"^[().]+$", secondary):
                 errors.append("Secondary structure must be in valid dot-bracket notation (only '.', '(', ')').")
 
@@ -169,7 +166,7 @@ class SelectSampleSection(QFrame):
 
         # Check if experiment is given without secondary (if needed)
         if experiment and not secondary:
-            errors.append("If specifying an experiment, a secondary structure must also be provided.")
+            errors.append("If specifying an experiment, a secondary control structure must also be provided.")
 
         return errors
 

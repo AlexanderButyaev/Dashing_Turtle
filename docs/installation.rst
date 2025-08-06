@@ -17,7 +17,7 @@ Step 2: Install Docker (for the database)
 
 Dashing Turtle uses a Dockerized database to store your data. You’ll need Docker installed to run it.
 
-**Windows / macOS**
+**macOS**
 
 - Download and install Docker Desktop:
   https://www.docker.com/products/docker-desktop
@@ -29,19 +29,8 @@ Dashing Turtle uses a Dockerized database to store your data. You’ll need Dock
 - Install Docker Engine following the instructions for your distribution:
   https://docs.docker.com/engine/install/
 
-Step 3: Start the Database
---------------------------
 
-Open your terminal or command prompt, navigate to your project directory, and run:
-
-.. code-block:: bash
-
-   docker compose up -d db
-
-✔ This command will download and start the database in the background.
-✔ Your data will persist across sessions.
-
-Step 4: Set Up the Python Environment
+Step 3: Set Up the Python Environment
 -------------------------------------
 
 You’ll now configure the local Python environment for running the app.
@@ -60,11 +49,6 @@ You’ll now configure the local Python environment for running the app.
 
      source venv/bin/activate
 
-- **Windows**
-
-  .. code-block:: bash
-
-     venv\Scripts\activate
 
 **3. Upgrade pip**
 
@@ -80,6 +64,12 @@ You’ll now configure the local Python environment for running the app.
 
 Step 5: Run the Application
 ---------------------------
+✔ This command will start the database in the background.
+✔ Your data will persist across sessions.
+
+.. code-block:: bash
+
+     dt-db up
 
 You can now launch the application in either GUI or CLI mode:
 
@@ -106,13 +96,13 @@ To stop the database:
 
 .. code-block:: bash
 
-   docker compose down
+   dt-db down
 
 To start it again:
 
 .. code-block:: bash
 
-   docker compose up -d db
+   dt-db up
 
 Data Output
 -----------

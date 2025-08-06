@@ -1,6 +1,8 @@
 import sys, re
 import traceback
 import readline
+import contextlib
+import io
 import cmd
 import configparser
 import os
@@ -28,18 +30,30 @@ else:
     readline.parse_and_bind("set editing-mode emacs")
 
 
-# Configure libedit on macOS (if needed)
+
+def safe_bind(binding):
+    try:
+        readline.parse_and_bind(binding)
+    except Exception:
+        pass
+
 if 'libedit' in readline.__doc__:
-    readline.parse_and_bind("bind ^I rl_complete")
-    readline.parse_and_bind("bind ^A beginning-of-line")
-    readline.parse_and_bind("bind ^E end-of-line")
-    readline.parse_and_bind("bind ^K kill-line")
-    readline.parse_and_bind("bind ^Y yank")
-    readline.parse_and_bind("bind ^P previous-history")
-    readline.parse_and_bind("bind ^N next-history")
+    # Only use *known valid* libedit commands
+    safe_bind("bind ^I rl-complete")
+    safe_bind("bind ^A ed-move-to-beg")
+    safe_bind("bind ^E ed-move-to-end")
+    safe_bind("bind ^K ed-kill-line")
+    safe_bind("bind ^P ed-prev-history")
+    safe_bind("bind ^N ed-next-history")
 else:
-    # GNU readline (Linux or correctly installed on macOS)
-    readline.parse_and_bind("tab: complete")
+    # GNU readline
+    safe_bind("tab: complete")
+    safe_bind("Control-a: beginning-of-line")
+    safe_bind("Control-e: end-of-line")
+    safe_bind("Control-k: kill-line")
+    safe_bind("Control-y: yank")
+    safe_bind("Control-p: previous-history")
+    safe_bind("Control-n: next-history")
 
 init(autoreset=True)
 
@@ -256,19 +270,20 @@ class DashingTurtleCLI(cmd.Cmd):
 
             sequence = opts.sequence
             # Validate that the sequence contains only valid RNA characters
-            if not re.fullmatch(r"^[ACGU]+$", sequence.upper()):
+            if not re.fullmatch(r"^[ACGTUacgtu]+$", sequence):
                 console = Console()
-                console.print("[red]Error: Sequence must contain only A, C, G, or U characters.[/red]")
+                console.print("[red]Error: Sequence must contain only A, C, G, T, or U characters.[/red]")
                 return
 
             secondary = opts.secondary
-            # Check that secondary structure is valid dot-bracket notation
-            if not re.fullmatch(r"^[().]+$", secondary):
-                console.print("[red]Error: Secondary structure must contain only '.', '(', and ')' characters.[/red]")
-                return
 
             # Validate secondary structure length
             if secondary:
+
+                if not re.fullmatch(r"^[().]+$", secondary):
+                    console.print("[red]Error: Secondary structure must contain only '.', '(', and ')' characters.[/red]")
+                    return
+
 
                 # Check secondary structure length
                 if len(secondary) != len(sequence):
@@ -280,7 +295,7 @@ class DashingTurtleCLI(cmd.Cmd):
                 # Check that experiment is not blank
                 if not opts.experiment.strip():
                     console.print(
-                        "[red]Error: Experiment ID must be provided when a secondary structure is specified.[/red]"
+                        "[red]Error: Control experiment must be provided when a secondary structure is specified.[/red]"
                     )
                     return
 
