@@ -1,4 +1,10 @@
-import os, re
+import os
+
+# Must be set before importing matplotlib or anything that might import pyplot
+os.environ.setdefault("MPLBACKEND", "Agg")
+os.environ.setdefault("QT_API", "pyqt6")
+
+import re
 import sys
 import numpy as np
 import pandas as pd
